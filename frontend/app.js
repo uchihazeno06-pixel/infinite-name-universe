@@ -20,14 +20,16 @@ async function loadWall(startPos) {
 
 loadWall(currentStart);
 
-function cancelSearch() {
+function cancelSearch(showMessage = true) {
   if (worker) {
-    worker.terminate(); // Instantly kills the background thread
+    worker.terminate();
     worker = null;
   }
   isSearching = false;
   document.getElementById("cancelBtn").style.display = "none";
-  document.getElementById("result").innerHTML = "Search cancelled.";
+  if (showMessage) {
+    document.getElementById("result").innerHTML = "Search cancelled.";
+  }
 }
 
 function startSearch(maxDepth) {
@@ -46,16 +48,14 @@ function startSearch(maxDepth) {
   
   resultDiv.innerHTML = "Scanning at max speed...";
   
-  // Spin up the Web Worker
   worker = new Worker('worker.js');
   
   worker.onmessage = function(e) {
     const data = e.data;
     
     if (data.found) {
-      resultDiv.innerHTML = `<span class="success">🎉 Found "${name}" at position ${data.position.toLocaleString()}!</span>`;
+      resultDiv.innerHTML = `<span class="success">🎉 Found "${name}"!</span>`;
       
-      // Load the page visually
       const foundPageStart = Math.max(0, data.position - 25000);
       loadWall(foundPageStart).then(() => {
         const textContainer = document.getElementById("text-content");
@@ -68,17 +68,17 @@ function startSearch(maxDepth) {
         }
       });
       
-      cancelSearch(); // Stop the worker
+      // Stop the worker, but DO NOT overwrite the success message
+      cancelSearch(false); 
       return;
     }
     
     if (data.done) {
       resultDiv.innerHTML = `<span class="error">Reached the limit of the scan. Not found.</span>`;
-      cancelSearch();
+      cancelSearch(false);
       return;
     }
     
-    // Update the visual wall as it scans
     if (!data.found && data.text) {
       document.getElementById("text-content").textContent = data.text;
       document.getElementById("stats").textContent = `Window: ${data.start.toLocaleString()} - ${data.end.toLocaleString()}`;
@@ -86,6 +86,5 @@ function startSearch(maxDepth) {
     }
   };
   
-  // Tell the worker to start scanning
   worker.postMessage({ name: name, start: scanEnd, end: scanStart });
 }

@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinite Name Universe</title>
     <style>
+        :root {
+            --bg: #09090b;
+            --panel: rgba(24, 24, 27, 0.8);
+            --border: #27272a;
+            --text: #a1a1aa;
+            --text-bright: #f4f4f5;
+            --accent: #3b82f6;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
         body {
-            background-color: #0d1117;
-            color: #8b949e; 
-            font-family: monospace;
+            background-color: var(--bg);
+            color: var(--text); 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -16,150 +27,194 @@
 
         .top-mask {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 160px; 
-            background-color: #0d1117; 
+            top: 0; left: 0; width: 100vw; height: 180px; 
+            background: linear-gradient(to bottom, var(--bg) 60%, transparent);
             z-index: 50; 
+            pointer-events: none;
         }
 
         /* Top Left Navigation */
         .nav-menu {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
             z-index: 100;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         
         .nav-btn {
-            background: #161b22;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
-            padding: 8px 12px;
-            border-radius: 5px;
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
-        .nav-btn:hover { background: #30363d; }
+        .nav-btn:hover { 
+            background: #27272a; 
+            color: var(--text-bright);
+            border-color: #3f3f46;
+        }
 
         /* --- THE WALL --- */
         #wall {
             width: 100vw;
             height: 100vh;
-            padding: 20px;
-            padding-top: 170px; 
+            padding: 24px;
+            padding-top: 190px; 
             box-sizing: border-box;
             overflow-y: auto; 
             word-wrap: break-word;
             text-align: justify;
-            font-size: 16px;
-            line-height: 1.6;
-            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 15px;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
             column-count: 2; 
-            column-gap: 40px;
+            column-gap: 60px;
             position: relative;
             z-index: 10;
+            color: #52525b;
         }
 
         /* --- SEARCH BOX --- */
         .controls {
             position: fixed;
-            top: 20px;
+            top: 24px;
             left: 50%;
             transform: translateX(-50%);
-            width: 400px;
-            background: #161b22;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.9);
+            width: 480px;
+            background: var(--panel);
+            backdrop-filter: blur(12px);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8);
             z-index: 100; 
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .search-row { display: flex; gap: 10px; }
+        .controls:focus-within {
+            border-color: #52525b;
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-row { display: flex; gap: 12px; }
         
         input {
             flex: 1;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #30363d;
-            background: #0d1117;
-            color: #c9d1d9;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(9, 9, 11, 0.6);
+            color: var(--text-bright);
             font-family: inherit;
             font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
         }
+        input:focus { border-color: var(--accent); }
         
         button {
-            padding: 10px;
-            border-radius: 5px;
+            padding: 14px 20px;
+            border-radius: 8px;
             border: none;
             color: white;
             cursor: pointer;
             font-family: inherit;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
+            transition: transform 0.1s, opacity 0.2s;
         }
+        button:active { transform: scale(0.97); }
         
-        .btn-search { background: #238636; }
-        .btn-search:hover { background: #2ea043; }
+        .btn-search { background: var(--text-bright); color: var(--bg); }
+        .btn-search:hover { opacity: 0.9; }
         
-        .depth-buttons { display: flex; gap: 5px; justify-content: space-between; margin-top: 10px; }
-        .btn-quick { background: #1f6feb; flex: 1; }
-        .btn-deep { background: #d29922; flex: 1; color: #000; }
-        .btn-haystack { background: #da3633; flex: 1; }
+        .depth-buttons { display: flex; gap: 8px; margin-top: 12px; }
         
-        .btn-cancel { background: #f85149; display: none; width: 100%; margin-top: 10px; }
+        .btn-quick { background: #1e3a8a; color: #93c5fd; flex: 1; border: 1px solid #1e40af; }
+        .btn-quick:hover { background: #1e40af; }
         
-        /* Bottom Result */
+        .btn-deep { background: #713f12; color: #fcd34d; flex: 1; border: 1px solid #854d0e; }
+        .btn-deep:hover { background: #854d0e; }
+        
+        .btn-haystack { background: #7f1d1d; color: #fca5a5; flex: 1; border: 1px solid #991b1b; }
+        .btn-haystack:hover { background: #991b1b; }
+        
+        .btn-cancel { 
+            background: transparent; 
+            color: var(--error);
+            border: 1px solid var(--error);
+            display: none; 
+            width: 100%;
+            margin-top: 12px;
+        }
+        .btn-cancel:hover { background: rgba(239, 68, 68, 0.1); }
+        
+        /* Bottom Result Pill */
         #result {
             position: fixed;
-            bottom: 20px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
-            background: #161b22;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-            font-size: 16px;
+            background: var(--panel);
+            backdrop-filter: blur(12px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            font-size: 15px;
             text-align: center;
-            min-width: 400px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
         }
         
         #stats {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 24px;
+            left: 24px;
             z-index: 100;
-            color: #8b949e;
-            background: #161b22;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #30363d;
+            color: #52525b;
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
         }
         
-        .success { color: #3fb950; font-weight: bold; }
-        .error { color: #f85149; }
+        .success { color: var(--success); font-weight: 600; }
+        .error { color: var(--error); font-weight: 500; }
         
         .highlight { 
-            background-color: #e3b341; 
+            background-color: #fbbf24; 
             color: #000; 
             font-weight: bold;
-            padding: 2px 4px; 
-            border-radius: 3px; 
-            box-shadow: 0 0 15px #e3b341;
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
         }
 
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
             z-index: 200;
             display: none;
             justify-content: center;
@@ -168,30 +223,45 @@
         .modal-overlay.active { display: flex; }
         
         .modal-content {
-            background: #161b22;
-            border: 1px solid #30363d;
-            padding: 30px;
-            border-radius: 8px;
-            width: 600px;
+            background: #18181b;
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 16px;
+            width: 500px;
             max-height: 80vh;
             overflow-y: auto;
-            color: #c9d1d9;
+            color: var(--text-bright);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            animation: slideUp 0.3s ease-out;
         }
-        .modal-content h2 { margin-top: 0; color: #58a6ff; }
-        .modal-content p { line-height: 1.6; }
-        .modal-content a { color: #58a6ff; text-decoration: none; font-weight: bold; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content h2 { margin-top: 0; color: var(--text-bright); font-weight: 600; }
+        .modal-content p { line-height: 1.6; color: var(--text); }
+        .modal-content ul { line-height: 1.8; color: var(--text); }
+        .modal-content a { color: var(--accent); text-decoration: none; font-weight: 500; }
         .modal-content a:hover { text-decoration: underline; }
-        .btn-close { background: #da3633; margin-top: 20px; width: 100%; }
+        
+        .btn-close { 
+            background: var(--border); 
+            color: var(--text-bright);
+            margin-top: 24px; 
+            width: 100%; 
+        }
+        .btn-close:hover { background: #3f3f46; }
     </style>
 </head>
 <body>
 
     <div class="top-mask"></div>
 
-    <!-- Top Left Menu -->
     <div class="nav-menu">
-        <button class="nav-btn" onclick="openModal('aboutProjectModal')">📖 About Project</button>
-        <button class="nav-btn" onclick="openModal('aboutBuilderModal')">👨‍💻 About Builder</button>
+        <button class="nav-btn" onclick="openModal('aboutProjectModal')">About Project</button>
+        <button class="nav-btn" onclick="openModal('aboutBuilderModal')">About Builder</button>
     </div>
 
     <div id="wall">
@@ -200,21 +270,20 @@
 
     <div class="controls">
         <div class="search-row">
-            <input type="text" id="searchInput" placeholder="Search..." onkeypress="if(event.key === 'Enter') startSearch(50000000)">
+            <input type="text" id="searchInput" placeholder="Search your name..." onkeypress="if(event.key === 'Enter') startSearch(50000000)">
             <button class="btn-search" onclick="startSearch(50000000)">Search</button>
         </div>
         <div class="depth-buttons">
-            <button class="btn-quick" onclick="startSearch(50000000)">🟢 Quick (50M)</button>
-            <button class="btn-deep" onclick="startSearch(300000000)">🟡 Deep (300M)</button>
-            <button class="btn-haystack" onclick="startSearch(2000000000)">🔴 Haystack (2B)</button>
+            <button class="btn-quick" onclick="startSearch(50000000)">🟢 Quick</button>
+            <button class="btn-deep" onclick="startSearch(300000000)">🟡 Deep</button>
+            <button class="btn-haystack" onclick="startSearch(2000000000)">🔴 Haystack</button>
         </div>
-        <button class="btn-cancel" id="cancelBtn" onclick="cancelSearch()">✖ Cancel Search</button>
+        <button class="btn-cancel" id="cancelBtn" onclick="cancelSearch(true)">Cancel Search</button>
     </div>
 
     <div id="stats">Window: loading...</div>
-    <div id="result">Type a name or pick a scan depth.</div>
+    <div id="result">Enter a name to search.</div>
 
-    <!-- About Project Modal -->
     <div class="modal-overlay" id="aboutProjectModal">
         <div class="modal-content">
             <h2>📖 About the Universe</h2>
@@ -229,7 +298,6 @@
         </div>
     </div>
 
-    <!-- About Builder Modal -->
     <div class="modal-overlay" id="aboutBuilderModal">
         <div class="modal-content">
             <h2>👨‍💻 About the Builder</h2>
