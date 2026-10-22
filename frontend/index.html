@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Name Universe</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #8b949e; 
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .top-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 160px; 
+            background-color: #0d1117; 
+            z-index: 50; 
+        }
+
+        /* Top Left Navigation */
+        .nav-menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+        .nav-btn:hover { background: #30363d; }
+
+        /* --- THE WALL --- */
+        #wall {
+            width: 100vw;
+            height: 100vh;
+            padding: 20px;
+            padding-top: 170px; 
+            box-sizing: border-box;
+            overflow-y: auto; 
+            word-wrap: break-word;
+            text-align: justify;
+            font-size: 16px;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            column-count: 2; 
+            column-gap: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- SEARCH BOX --- */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            background: #161b22;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.9);
+            z-index: 100; 
+        }
+
+        .search-row { display: flex; gap: 10px; }
+        
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: #c9d1d9;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .btn-search { background: #238636; }
+        .btn-search:hover { background: #2ea043; }
+        
+        .depth-buttons { display: flex; gap: 5px; justify-content: space-between; margin-top: 10px; }
+        .btn-quick { background: #1f6feb; flex: 1; }
+        .btn-deep { background: #d29922; flex: 1; color: #000; }
+        .btn-haystack { background: #da3633; flex: 1; }
+        
+        .btn-cancel { background: #f85149; display: none; width: 100%; margin-top: 10px; }
+        
+        /* Bottom Result */
+        #result {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: #161b22;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            font-size: 16px;
+            text-align: center;
+            min-width: 400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.9);
+        }
+        
+        #stats {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            color: #8b949e;
+            background: #161b22;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #30363d;
+        }
+        
+        .success { color: #3fb950; font-weight: bold; }
+        .error { color: #f85149; }
+        
+        .highlight { 
+            background-color: #e3b341; 
+            color: #000; 
+            font-weight: bold;
+            padding: 2px 4px; 
+            border-radius: 3px; 
+            box-shadow: 0 0 15px #e3b341;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        
+        .modal-content {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 30px;
+            border-radius: 8px;
+            width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #c9d1d9;
+        }
+        .modal-content h2 { margin-top: 0; color: #58a6ff; }
+        .modal-content p { line-height: 1.6; }
+        .modal-content a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .modal-content a:hover { text-decoration: underline; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #30363d; }
+        th { color: #8b949e; }
+        .btn-close { background: #da3633; margin-top: 20px; width: 100%; }
+        .btn-claim { background: #238636; padding: 5px 10px; margin-left: 10px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-mask"></div>
+
+    <!-- Top Left Menu -->
+    <div class="nav-menu">
+        <button class="nav-btn" onclick="openModal('leaderboardModal')">🏆 Leaderboard</button>
+        <button class="nav-btn" onclick="openModal('aboutProjectModal')">📖 About Project</button>
+        <button class="nav-btn" onclick="openModal('aboutBuilderModal')">👨‍💻 About Builder</button>
+    </div>
+
+    <div id="wall">
+        <span id="text-content"></span>
+    </div>
+
+    <div class="controls">
+        <div class="search-row">
+            <input type="text" id="searchInput" placeholder="Search..." onkeypress="if(event.key === 'Enter') startSearch(50000000)">
+            <button class="btn-search" onclick="startSearch(50000000)">Search</button>
+        </div>
+        <div class="depth-buttons">
+            <button class="btn-quick" onclick="startSearch(50000000)">🟢 Quick (50M)</button>
+            <button class="btn-deep" onclick="startSearch(300000000)">🟡 Deep (300M)</button>
+            <button class="btn-haystack" onclick="startSearch(2000000000)">🔴 Haystack (2B)</button>
+        </div>
+        <button class="btn-cancel" id="cancelBtn" onclick="cancelSearch()">✖ Cancel Search</button>
+    </div>
+
+    <div id="stats">Window: loading...</div>
+    <div id="result">Type a name or pick a scan depth.</div>
+
+    <!-- Leaderboard Modal -->
+    <div class="modal-overlay" id="leaderboardModal">
+        <div class="modal-content">
+            <h2>🏆 Hall of Fame</h2>
+            <p>The longest names found and claimed in the universe.</p>
+            <table id="leaderboardTable">
+                <thead>
+                    <tr><th>Name</th><th>Length</th><th>Claimed By</th><th>Position</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button class="btn-close" onclick="closeModal('leaderboardModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- About Project Modal -->
+    <div class="modal-overlay" id="aboutProjectModal">
+        <div class="modal-content">
+            <h2>📖 About the Universe</h2>
+            <p>This is a 2-Billion character infinite universe generated mathematically using a single seed. The letters are not stored anywhere—they are calculated on demand.</p>
+            <p>Because the universe uses a uniform random distribution, short names appear frequently, while long names are mathematically rare.</p>
+            <ul>
+                <li><strong>Quick Scan:</strong> Scans 50 million characters.</li>
+                <li><strong>Deep Scan:</strong> Scans 300 million characters.</li>
+                <li><strong>Haystack:</strong> Scans the entire 2 billion universe.</li>
+            </ul>
+            <button class="btn-close" onclick="closeModal('aboutProjectModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- About Builder Modal -->
+    <div class="modal-overlay" id="aboutBuilderModal">
+        <div class="modal-content">
+            <h2>👨‍💻 About the Builder</h2>
+            <p>Hi, I'm <strong>Zeno</strong>! I built this project to explore the intersection of probability, infinite sequences, and web development.</p>
+            <p>The seed-based generation was inspired by the Infinite Monkey Theorem, and the UI was built using FastAPI (Python) and Vanilla JavaScript.</p>
+            <p>Check out more of my projects on GitHub:</p>
+            <p style="font-size: 18px;">
+                <a href="https://github.com/uchihazeno06-pixel" target="_blank">🔗 https://github.com/uchihazeno06-pixel</a>
+            </p>
+            <button class="btn-close" onclick="closeModal('aboutBuilderModal')">Close</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+__pycache__/
+universe.db
+.env
+venv/
