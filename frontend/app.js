@@ -3,65 +3,13 @@ let currentStart = UNIVERSE_END - 50000;
 let isSearching = false;
 let abortController = null;
 
-// --- MODAL & LEADERBOARD LOGIC ---
-async function openModal(id) {
+// --- MODAL LOGIC ---
+function openModal(id) {
   document.getElementById(id).classList.add("active");
-  if (id === "leaderboardModal") {
-    await loadLeaderboard();
-  }
 }
 
 function closeModal(id) {
   document.getElementById(id).classList.remove("active");
-}
-
-async function loadLeaderboard() {
-  const tbody = document.querySelector("#leaderboardTable tbody");
-  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
-  
-  try {
-    const res = await fetch("/leaderboard");
-    const data = await res.json();
-    
-    if (data.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='4'>No names claimed yet. Be the first!</td></tr>";
-      return;
-    }
-    
-    tbody.innerHTML = "";
-    data.forEach(row => {
-      tbody.innerHTML += `
-        <tr>
-          <td><strong>${row.pattern}</strong></td>
-          <td>${row.length}</td>
-          <td>${row.username}</td>
-          <td>${row.position.toLocaleString()}</td>
-        </tr>
-      `;
-    });
-  } catch (err) {
-    tbody.innerHTML = "<tr><td colspan='4'>Error loading leaderboard.</td></tr>";
-  }
-}
-
-async function claimName(name, position) {
-  const username = prompt(`You found "${name}"! Enter your username to claim it:`);
-  if (!username || username.trim() === "") return;
-  
-  try {
-    const res = await fetch(`/claim?username=${encodeURIComponent(username)}&pattern=${encodeURIComponent(name)}`, {
-      method: 'POST'
-    });
-    const data = await res.json();
-    
-    if (data.ok) {
-      document.getElementById("result").innerHTML = `<span class="success">🏆 Successfully claimed "${name}"!</span>`;
-    } else {
-      document.getElementById("result").innerHTML = `<span class="error">Failed to claim: ${data.reason || 'Unknown error'}</span>`;
-    }
-  } catch (err) {
-    document.getElementById("result").innerHTML = `<span class="error">Error claiming name.</span>`;
-  }
 }
 
 // --- SEARCH LOGIC ---
@@ -137,10 +85,7 @@ async function startSearch(maxDepth) {
       const data = await res.json();
       
       if (data.found) {
-        resultDiv.innerHTML = `
-          <span class="success">🎉 Found "${name}" at position ${data.position.toLocaleString()}!</span>
-          <button class="btn-claim" onclick="claimName('${name}', ${data.position})">Claim Name</button>
-        `;
+        resultDiv.innerHTML = `<span class="success">🎉 Found "${name}" at position ${data.position.toLocaleString()}!</span>`;
         
         const foundPageStart = Math.max(0, data.position - 25000);
         await loadWall(foundPageStart);

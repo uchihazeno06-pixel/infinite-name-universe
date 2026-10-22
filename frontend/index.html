@@ -179,18 +179,9 @@
         }
         .modal-content h2 { margin-top: 0; color: #58a6ff; }
         .modal-content p { line-height: 1.6; }
-        .modal-content a {
-            color: #58a6ff;
-            text-decoration: none;
-            font-weight: bold;
-        }
+        .modal-content a { color: #58a6ff; text-decoration: none; font-weight: bold; }
         .modal-content a:hover { text-decoration: underline; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #30363d; }
-        th { color: #8b949e; }
         .btn-close { background: #da3633; margin-top: 20px; width: 100%; }
-        .btn-claim { background: #238636; padding: 5px 10px; margin-left: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -199,7 +190,6 @@
 
     <!-- Top Left Menu -->
     <div class="nav-menu">
-        <button class="nav-btn" onclick="openModal('leaderboardModal')">🏆 Leaderboard</button>
         <button class="nav-btn" onclick="openModal('aboutProjectModal')">📖 About Project</button>
         <button class="nav-btn" onclick="openModal('aboutBuilderModal')">👨‍💻 About Builder</button>
     </div>
@@ -224,21 +214,6 @@
     <div id="stats">Window: loading...</div>
     <div id="result">Type a name or pick a scan depth.</div>
 
-    <!-- Leaderboard Modal -->
-    <div class="modal-overlay" id="leaderboardModal">
-        <div class="modal-content">
-            <h2>🏆 Hall of Fame</h2>
-            <p>The longest names found and claimed in the universe.</p>
-            <table id="leaderboardTable">
-                <thead>
-                    <tr><th>Name</th><th>Length</th><th>Claimed By</th><th>Position</th></tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <button class="btn-close" onclick="closeModal('leaderboardModal')">Close</button>
-        </div>
-    </div>
-
     <!-- About Project Modal -->
     <div class="modal-overlay" id="aboutProjectModal">
         <div class="modal-content">
@@ -258,11 +233,10 @@
     <div class="modal-overlay" id="aboutBuilderModal">
         <div class="modal-content">
             <h2>👨‍💻 About the Builder</h2>
-            <p>Hi, I'm <strong>Zeno</strong>! I built this project to explore the intersection of probability, infinite sequences, and web development.</p>
-            <p>The seed-based generation was inspired by the Infinite Monkey Theorem, and the UI was built using FastAPI (Python) and Vanilla JavaScript.</p>
+            <p>Hi, I'm <strong>[Your Name]</strong>! I built this project to explore the intersection of probability, infinite sequences, and web development.</p>
             <p>Check out more of my projects on GitHub:</p>
             <p style="font-size: 18px;">
-                <a href="https://github.com/uchihazeno06-pixel" target="_blank">🔗 https://github.com/uchihazeno06-pixel</a>
+                <a href="https://github.com/YOUR_USERNAME" target="_blank">🔗 github.com/YOUR_USERNAME</a>
             </p>
             <button class="btn-close" onclick="closeModal('aboutBuilderModal')">Close</button>
         </div>
