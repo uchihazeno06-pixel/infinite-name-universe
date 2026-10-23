@@ -84,24 +84,29 @@ function startSearch(maxDepth) {
       const foundPageStart = Math.max(0, data.position - 25000);
       
       loadWall(foundPageStart).then(() => {
-        const wallDiv = document.getElementById("wall");
         const textContainer = document.getElementById("text-content");
         const regex = new RegExp(`(${name})`, "gi");
         
         textContainer.innerHTML = textContainer.textContent.replace(regex, `<span class="highlight" id="found-match">$1</span>`);
         
-        // Wait for the browser to render the new text, then scroll exactly to the element's offset
+        // Wait for the browser to paint the new text, then scroll
         setTimeout(() => {
+          const wallDiv = document.getElementById("wall");
           const matchElement = document.getElementById("found-match");
+          
           if (matchElement) {
-            // offsetTop gives us the exact distance from the top of the container
-            const targetY = matchElement.offsetTop - (wallDiv.clientHeight / 2);
+            const wallRect = wallDiv.getBoundingClientRect();
+            const matchRect = matchElement.getBoundingClientRect();
+            
+            const scrollDistance = matchRect.top - wallRect.top + wallDiv.scrollTop;
+            const finalScroll = scrollDistance - (wallDiv.clientHeight / 2);
+            
             wallDiv.scrollTo({
-              top: targetY,
+              top: finalScroll,
               behavior: "smooth"
             });
           }
-        }, 150);
+        }, 200); 
       });
       
       cancelSearch(false, false); 
