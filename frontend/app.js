@@ -84,23 +84,24 @@ function startSearch(maxDepth) {
       const foundPageStart = Math.max(0, data.position - 25000);
       
       loadWall(foundPageStart).then(() => {
+        const wallDiv = document.getElementById("wall");
         const textContainer = document.getElementById("text-content");
         const regex = new RegExp(`(${name})`, "gi");
         
-        // 1. Add an invisible anchor right before the word, and the yellow highlight on the word
-        const replacement = `<span id="scroll-anchor"></span><span class="highlight" id="found-match">$1</span>`;
-        textContainer.innerHTML = textContainer.textContent.replace(regex, replacement);
+        textContainer.innerHTML = textContainer.textContent.replace(regex, `<span class="highlight" id="found-match">$1</span>`);
         
-        // 2. Scroll directly to the anchor
+        // Wait for the browser to render the new text, then scroll exactly to the element's offset
         setTimeout(() => {
-          const anchor = document.getElementById("scroll-anchor");
-          if (anchor) {
-            anchor.scrollIntoView({ 
-              behavior: "smooth", 
-              block: "center" 
+          const matchElement = document.getElementById("found-match");
+          if (matchElement) {
+            // offsetTop gives us the exact distance from the top of the container
+            const targetY = matchElement.offsetTop - (wallDiv.clientHeight / 2);
+            wallDiv.scrollTo({
+              top: targetY,
+              behavior: "smooth"
             });
           }
-        }, 150); 
+        }, 150);
       });
       
       cancelSearch(false, false); 
