@@ -2,7 +2,7 @@
 
 An interactive, procedurally generated web application where users can search a massive 2-billion character universe of random letters to see if their name exists.
 
-**🔗 Live Demo:** [https://infinite-name-universe.onrender.com](https://infinite-name-universe.onrender.com) 
+**🔗 Live Demo:** [https://infinite-name-universe-1.onrender.com](https://infinite-name-universe-1.onrender.com) 
 *(Note: Hosted on Render's free tier, the first load may take 30–50 seconds to wake up).*
 
 ## 🧠 The Concept
