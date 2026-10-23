@@ -38,7 +38,8 @@ async function loadWall(startPos) {
 
 loadWall(currentStart);
 
-function cancelSearch(showMessage = true) {
+// Added bringBoxBack parameter
+function cancelSearch(showMessage = true, bringBoxBack = true) {
   if (worker) {
     worker.terminate();
     worker = null;
@@ -50,7 +51,10 @@ function cancelSearch(showMessage = true) {
     document.getElementById("result").innerHTML = "Search cancelled.";
   }
   
-  toggleSearchBox(); 
+  // Only bring the box back if asked to
+  if (bringBoxBack) {
+    toggleSearchBox(); 
+  }
 }
 
 function startSearch(maxDepth) {
@@ -91,13 +95,15 @@ function startSearch(maxDepth) {
         }
       });
       
-      cancelSearch(false); 
+      // DO NOT bring the box back when found
+      cancelSearch(false, false); 
       return;
     }
     
     if (data.done) {
       resultDiv.innerHTML = `<span class="error">Reached the limit of the scan. Not found.</span>`;
-      cancelSearch(false);
+      // Bring the box back if it failed (so they can try another name)
+      cancelSearch(false, true);
       return;
     }
     
