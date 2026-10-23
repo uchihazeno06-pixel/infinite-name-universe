@@ -38,7 +38,6 @@ async function loadWall(startPos) {
 
 loadWall(currentStart);
 
-// Added bringBoxBack parameter
 function cancelSearch(showMessage = true, bringBoxBack = true) {
   if (worker) {
     worker.terminate();
@@ -51,7 +50,6 @@ function cancelSearch(showMessage = true, bringBoxBack = true) {
     document.getElementById("result").innerHTML = "Search cancelled.";
   }
   
-  // Only bring the box back if asked to
   if (bringBoxBack) {
     toggleSearchBox(); 
   }
@@ -84,25 +82,37 @@ function startSearch(maxDepth) {
       resultDiv.innerHTML = `<span class="success">🎉 Found "${name}"!</span>`;
       
       const foundPageStart = Math.max(0, data.position - 25000);
+      
+      // Load the page, then highlight and scroll
       loadWall(foundPageStart).then(() => {
+        const wallDiv = document.getElementById("wall");
         const textContainer = document.getElementById("text-content");
         const regex = new RegExp(`(${name})`, "gi");
+        
         textContainer.innerHTML = textContainer.textContent.replace(regex, `<span class="highlight" id="found-match">$1</span>`);
         
         const matchElement = document.getElementById("found-match");
         if (matchElement) {
-          matchElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          // Calculate exact scroll position relative to the #wall container
+          const wallRect = wallDiv.getBoundingClientRect();
+          const matchRect = matchElement.getBoundingClientRect();
+          
+          // Scroll to center the word vertically
+          const scrollTarget = wallDiv.scrollTop + (matchRect.top - wallRect.top) - (wallDiv.clientHeight / 2) + (matchRect.height / 2);
+          
+          wallDiv.scrollTo({
+            top: scrollTarget,
+            behavior: "smooth"
+          });
         }
       });
       
-      // DO NOT bring the box back when found
       cancelSearch(false, false); 
       return;
     }
     
     if (data.done) {
       resultDiv.innerHTML = `<span class="error">Reached the limit of the scan. Not found.</span>`;
-      // Bring the box back if it failed (so they can try another name)
       cancelSearch(false, true);
       return;
     }
