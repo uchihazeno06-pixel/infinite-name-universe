@@ -82,6 +82,28 @@
             color: #52525b;
         }
 
+        /* --- FLOATING TOGGLE BUTTON --- */
+        #toggleSearchBtn {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90; /* Below the main search box */
+            background: var(--panel);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            color: var(--text-bright);
+            padding: 10px 20px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: none; /* Hidden by default */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+        }
+        #toggleSearchBtn:hover { background: #27272a; }
+
         /* --- SEARCH BOX --- */
         .controls {
             position: fixed;
@@ -96,7 +118,13 @@
             border: 1px solid var(--border);
             box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8);
             z-index: 100; 
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .controls.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -20px); /* Slide up slightly */
         }
 
         .controls:focus-within {
@@ -277,15 +305,9 @@
                 font-size: 14px;
                 text-align: left; 
             }
-            .search-row {
-                flex-direction: column; 
-            }
-            .depth-buttons {
-                flex-direction: column; 
-            }
-            #stats {
-                display: none; 
-            }
+            .search-row { flex-direction: column; }
+            .depth-buttons { flex-direction: column; }
+            #stats { display: none; }
             #result {
                 width: 90%;
                 box-sizing: border-box;
@@ -295,6 +317,9 @@
             .modal-content {
                 width: 90%;
                 padding: 24px;
+            }
+            #toggleSearchBtn {
+                top: 16px;
             }
         }
     </style>
@@ -312,7 +337,10 @@
         <span id="text-content"></span>
     </div>
 
-    <div class="controls">
+    <!-- The button that appears when the search bar is hidden -->
+    <button id="toggleSearchBtn" onclick="toggleSearchBox()">🔍 Open Search</button>
+
+    <div class="controls" id="searchPanel">
         <div class="search-row">
             <input type="text" id="searchInput" placeholder="Search your name..." onkeypress="if(event.key === 'Enter') startSearch(50000000)">
             <button class="btn-search" onclick="startSearch(50000000)">Search</button>
