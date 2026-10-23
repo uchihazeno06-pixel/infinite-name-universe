@@ -253,6 +253,50 @@
             width: 100%; 
         }
         .btn-close:hover { background: #3f3f46; }
+
+        /* 📱 MOBILE RESPONSIVENESS */
+        @media (max-width: 768px) {
+            .controls {
+                width: 90%;
+                top: 16px;
+                padding: 12px;
+            }
+            .nav-menu {
+                top: 160px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            #wall {
+                padding: 16px;
+                padding-top: 230px; 
+                column-count: 1; 
+                font-size: 14px;
+                text-align: left; 
+            }
+            .search-row {
+                flex-direction: column; 
+            }
+            .depth-buttons {
+                flex-direction: column; 
+            }
+            #stats {
+                display: none; 
+            }
+            #result {
+                width: 90%;
+                box-sizing: border-box;
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+            .modal-content {
+                width: 90%;
+                padding: 24px;
+            }
+        }
     </style>
 </head>
 <body>
