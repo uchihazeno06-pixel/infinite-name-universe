@@ -289,9 +289,9 @@
                 top: 16px;
                 padding: 12px;
             }
-            /* COMPLETELY REMOVE THE PANEL ON MOBILE WHEN HIDDEN */
+            /* FORCE HIDE ON MOBILE */
             .controls.hidden {
-                display: none;
+                display: none !important;
             }
             .nav-menu {
                 top: 160px;
@@ -341,7 +341,7 @@
         <span id="text-content"></span>
     </div>
 
-    <button id="toggleSearchBtn" onclick="toggleSearchBox()">🔍 Search</button>
+    <button id="toggleSearchBtn" onclick="toggleSearchBox()">🔍 Open Search</button>
 
     <div class="controls" id="searchPanel">
         <div class="search-row">
