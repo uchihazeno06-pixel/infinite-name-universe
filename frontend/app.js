@@ -6,7 +6,6 @@ let worker = null;
 function openModal(id) { document.getElementById(id).classList.add("active"); }
 function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
-// --- SEARCH BOX TOGGLE LOGIC ---
 function hideSearchBox() {
   document.getElementById("searchPanel").classList.add("hidden");
   document.getElementById("toggleSearchBtn").style.display = "block";
@@ -17,13 +16,10 @@ function toggleSearchBox() {
   const toggleBtn = document.getElementById("toggleSearchBtn");
   
   if (panel.classList.contains("hidden")) {
-    // Show it
     panel.classList.remove("hidden");
     toggleBtn.style.display = "none";
-    // Focus the input automatically
     document.getElementById("searchInput").focus();
   } else {
-    // Hide it
     hideSearchBox();
   }
 }
@@ -54,7 +50,6 @@ function cancelSearch(showMessage = true) {
     document.getElementById("result").innerHTML = "Search cancelled.";
   }
   
-  // Bring the search box back when cancelled or finished
   toggleSearchBox(); 
 }
 
@@ -65,8 +60,6 @@ function startSearch(maxDepth) {
   if (!name) return;
   
   isSearching = true;
-  
-  // Hide the search box so the user can see the wall
   hideSearchBox();
 
   const resultDiv = document.getElementById("result");
@@ -98,7 +91,7 @@ function startSearch(maxDepth) {
         }
       });
       
-      cancelSearch(false); // Stop worker without overwriting success message, brings search box back
+      cancelSearch(false); 
       return;
     }
     
