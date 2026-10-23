@@ -74,11 +74,17 @@
             font-size: 15px;
             line-height: 1.8;
             letter-spacing: 0.5px;
-            column-count: 2; 
-            column-gap: 60px;
             position: relative;
             z-index: 10;
             color: #52525b;
+        }
+
+        /* COLUMNS ONLY ON DESKTOP */
+        @media (min-width: 769px) {
+            #text-content {
+                column-count: 2;
+                column-gap: 60px;
+            }
         }
 
         #toggleSearchBtn {
@@ -300,9 +306,12 @@
             #wall {
                 padding: 16px;
                 padding-top: 230px; 
-                column-count: 1; /* NO MULTI-COLUMNS ON MOBILE */
                 font-size: 14px;
-                text-align: left; /* NO JUSTIFICATION ON MOBILE */
+                text-align: left; /* Left aligned for perfect scrolling */
+            }
+            /* STRICTLY SINGLE COLUMN ON MOBILE */
+            #text-content {
+                column-count: 1 !important; 
             }
             .search-row { flex-direction: column; }
             .depth-buttons { flex-direction: column; }
