@@ -33,7 +33,6 @@
             pointer-events: none;
         }
 
-        /* Top Left Navigation */
         .nav-menu {
             position: fixed;
             top: 24px;
@@ -61,7 +60,7 @@
             border-color: #3f3f46;
         }
 
-        /* --- THE WALL --- */
+        /* THE WALL */
         #wall {
             width: 100vw;
             height: 100vh;
@@ -82,7 +81,6 @@
             color: #52525b;
         }
 
-        /* --- FLOATING TOGGLE BUTTON --- */
         #toggleSearchBtn {
             position: fixed;
             top: 24px;
@@ -104,7 +102,6 @@
         }
         #toggleSearchBtn:hover { background: #27272a; }
 
-        /* --- SEARCH BOX --- */
         .controls {
             position: fixed;
             top: 24px;
@@ -185,7 +182,6 @@
         }
         .btn-cancel:hover { background: rgba(239, 68, 68, 0.1); }
         
-        /* Bottom Result Pill */
         #result {
             position: fixed;
             bottom: 24px;
@@ -229,6 +225,7 @@
             border-radius: 4px; 
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
             animation: pulse 2s infinite;
+            display: inline-block;
         }
 
         @keyframes pulse {
@@ -237,7 +234,6 @@
             100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
         }
 
-        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -282,14 +278,13 @@
         }
         .btn-close:hover { background: #3f3f46; }
 
-        /* 📱 MOBILE RESPONSIVENESS */
+        /* 📱 MOBILE FIXES */
         @media (max-width: 768px) {
             .controls {
                 width: 90%;
                 top: 16px;
                 padding: 12px;
             }
-            /* FORCE HIDE ON MOBILE */
             .controls.hidden {
                 display: none !important;
             }
@@ -305,9 +300,9 @@
             #wall {
                 padding: 16px;
                 padding-top: 230px; 
-                column-count: 1; 
+                column-count: 1; /* NO MULTI-COLUMNS ON MOBILE */
                 font-size: 14px;
-                text-align: left; 
+                text-align: left; /* NO JUSTIFICATION ON MOBILE */
             }
             .search-row { flex-direction: column; }
             .depth-buttons { flex-direction: column; }
