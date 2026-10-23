@@ -87,19 +87,20 @@ function startSearch(maxDepth) {
         const textContainer = document.getElementById("text-content");
         const regex = new RegExp(`(${name})`, "gi");
         
-        textContainer.innerHTML = textContainer.textContent.replace(regex, `<span class="highlight" id="found-match">$1</span>`);
+        // 1. Add an invisible anchor right before the word, and the yellow highlight on the word
+        const replacement = `<span id="scroll-anchor"></span><span class="highlight" id="found-match">$1</span>`;
+        textContainer.innerHTML = textContainer.textContent.replace(regex, replacement);
         
-        // Give the browser a tiny moment to render the HTML before scrolling
+        // 2. Scroll directly to the anchor
         setTimeout(() => {
-          const matchElement = document.getElementById("found-match");
-          if (matchElement) {
-            // This is the most reliable way to scroll in a column layout
-            matchElement.scrollIntoView({ 
+          const anchor = document.getElementById("scroll-anchor");
+          if (anchor) {
+            anchor.scrollIntoView({ 
               behavior: "smooth", 
               block: "center" 
             });
           }
-        }, 100); 
+        }, 150); 
       });
       
       cancelSearch(false, false); 
