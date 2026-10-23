@@ -84,16 +84,15 @@ function startSearch(maxDepth) {
       const foundPageStart = Math.max(0, data.position - 25000);
       
       loadWall(foundPageStart).then(() => {
+        const wallDiv = document.getElementById("wall");
         const textContainer = document.getElementById("text-content");
         const regex = new RegExp(`(${name})`, "gi");
         
         textContainer.innerHTML = textContainer.textContent.replace(regex, `<span class="highlight" id="found-match">$1</span>`);
         
-        // Wait for the browser to paint the new text, then scroll
-        setTimeout(() => {
-          const wallDiv = document.getElementById("wall");
+        // Instant scroll using requestAnimationFrame
+        requestAnimationFrame(() => {
           const matchElement = document.getElementById("found-match");
-          
           if (matchElement) {
             const wallRect = wallDiv.getBoundingClientRect();
             const matchRect = matchElement.getBoundingClientRect();
@@ -103,10 +102,10 @@ function startSearch(maxDepth) {
             
             wallDiv.scrollTo({
               top: finalScroll,
-              behavior: "smooth"
+              behavior: "smooth" // Keeps it smooth but instant
             });
           }
-        }, 200); 
+        });
       });
       
       cancelSearch(false, false); 
