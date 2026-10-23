@@ -6,6 +6,28 @@ let worker = null;
 function openModal(id) { document.getElementById(id).classList.add("active"); }
 function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
+// --- SEARCH BOX TOGGLE LOGIC ---
+function hideSearchBox() {
+  document.getElementById("searchPanel").classList.add("hidden");
+  document.getElementById("toggleSearchBtn").style.display = "block";
+}
+
+function toggleSearchBox() {
+  const panel = document.getElementById("searchPanel");
+  const toggleBtn = document.getElementById("toggleSearchBtn");
+  
+  if (panel.classList.contains("hidden")) {
+    // Show it
+    panel.classList.remove("hidden");
+    toggleBtn.style.display = "none";
+    // Focus the input automatically
+    document.getElementById("searchInput").focus();
+  } else {
+    // Hide it
+    hideSearchBox();
+  }
+}
+
 async function loadWall(startPos) {
   const textContainer = document.getElementById("text-content");
   try {
@@ -27,9 +49,13 @@ function cancelSearch(showMessage = true) {
   }
   isSearching = false;
   document.getElementById("cancelBtn").style.display = "none";
+  
   if (showMessage) {
     document.getElementById("result").innerHTML = "Search cancelled.";
   }
+  
+  // Bring the search box back when cancelled or finished
+  toggleSearchBox(); 
 }
 
 function startSearch(maxDepth) {
@@ -39,6 +65,10 @@ function startSearch(maxDepth) {
   if (!name) return;
   
   isSearching = true;
+  
+  // Hide the search box so the user can see the wall
+  hideSearchBox();
+
   const resultDiv = document.getElementById("result");
   const cancelBtn = document.getElementById("cancelBtn");
   cancelBtn.style.display = "block";
@@ -68,8 +98,7 @@ function startSearch(maxDepth) {
         }
       });
       
-      // Stop the worker, but DO NOT overwrite the success message
-      cancelSearch(false); 
+      cancelSearch(false); // Stop worker without overwriting success message, brings search box back
       return;
     }
     
