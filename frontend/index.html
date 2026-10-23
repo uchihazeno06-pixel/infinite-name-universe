@@ -88,7 +88,7 @@
             top: 24px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 90; /* Below the main search box */
+            z-index: 90; 
             background: var(--panel);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border);
@@ -98,7 +98,7 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            display: none; /* Hidden by default */
+            display: none; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             transition: all 0.2s ease;
         }
@@ -124,7 +124,7 @@
         .controls.hidden {
             opacity: 0;
             pointer-events: none;
-            transform: translate(-50%, -20px); /* Slide up slightly */
+            transform: translate(-50%, -20px); 
         }
 
         .controls:focus-within {
@@ -289,6 +289,10 @@
                 top: 16px;
                 padding: 12px;
             }
+            /* COMPLETELY REMOVE THE PANEL ON MOBILE WHEN HIDDEN */
+            .controls.hidden {
+                display: none;
+            }
             .nav-menu {
                 top: 160px;
                 left: 50%;
@@ -337,8 +341,7 @@
         <span id="text-content"></span>
     </div>
 
-    <!-- The button that appears when the search bar is hidden -->
-    <button id="toggleSearchBtn" onclick="toggleSearchBox()">🔍 Open Search</button>
+    <button id="toggleSearchBtn" onclick="toggleSearchBox()">🔍 Search</button>
 
     <div class="controls" id="searchPanel">
         <div class="search-row">
