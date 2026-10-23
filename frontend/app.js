@@ -83,28 +83,23 @@ function startSearch(maxDepth) {
       
       const foundPageStart = Math.max(0, data.position - 25000);
       
-      // Load the page, then highlight and scroll
       loadWall(foundPageStart).then(() => {
-        const wallDiv = document.getElementById("wall");
         const textContainer = document.getElementById("text-content");
         const regex = new RegExp(`(${name})`, "gi");
         
         textContainer.innerHTML = textContainer.textContent.replace(regex, `<span class="highlight" id="found-match">$1</span>`);
         
-        const matchElement = document.getElementById("found-match");
-        if (matchElement) {
-          // Calculate exact scroll position relative to the #wall container
-          const wallRect = wallDiv.getBoundingClientRect();
-          const matchRect = matchElement.getBoundingClientRect();
-          
-          // Scroll to center the word vertically
-          const scrollTarget = wallDiv.scrollTop + (matchRect.top - wallRect.top) - (wallDiv.clientHeight / 2) + (matchRect.height / 2);
-          
-          wallDiv.scrollTo({
-            top: scrollTarget,
-            behavior: "smooth"
-          });
-        }
+        // Give the browser a tiny moment to render the HTML before scrolling
+        setTimeout(() => {
+          const matchElement = document.getElementById("found-match");
+          if (matchElement) {
+            // This is the most reliable way to scroll in a column layout
+            matchElement.scrollIntoView({ 
+              behavior: "smooth", 
+              block: "center" 
+            });
+          }
+        }, 100); 
       });
       
       cancelSearch(false, false); 
